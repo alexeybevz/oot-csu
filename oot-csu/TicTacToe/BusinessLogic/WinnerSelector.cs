@@ -29,12 +29,12 @@ namespace TicTacToeGame.BusinessLogic
                     return winner;
             }
 
-            bool isWinnerByDiagonal = TryGetWinner(steps, s => (s.Row + s.Col) == size + 1, out winner);
-            if (isWinnerByDiagonal)
+            bool isWinnerByBackDiagonal = TryGetWinner(steps, s => (s.Row + s.Col) == size + 1, out winner);
+            if (isWinnerByBackDiagonal)
                 return winner;
 
-            bool isWinnerByBackDiagonal = TryGetWinner(steps, s => s.Row == s.Col, out winner);
-            if (isWinnerByBackDiagonal)
+            bool isWinnerByDiagonal = TryGetWinner(steps, s => s.Row == s.Col, out winner);
+            if (isWinnerByDiagonal)
                 return winner;
             
             return winner;
