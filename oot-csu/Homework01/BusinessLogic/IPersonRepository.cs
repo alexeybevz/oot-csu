@@ -3,7 +3,7 @@ using Homework01.Domain;
 
 namespace Homework01.BusinessLogic
 {
-    public interface IPersonRelationshipRepository
+    public interface IPersonRepository
     {
         List<Person> GetParents(Person person);
         List<Person> GetAuntsAndUncles(Person person);

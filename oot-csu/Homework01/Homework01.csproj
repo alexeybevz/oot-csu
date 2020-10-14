@@ -22,6 +22,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Homework01</RootNamespace>
+    <ProjectGuid>{F912A59C-26DD-4032-B4DE-BFE0E56C9F4D}</ProjectGuid>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -38,15 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\Person.cs" />
-    <Compile Include="Domain\PersonParent.cs" />
-    <Compile Include="Domain\PersonPartner.cs" />
     <Compile Include="Domain\Gender.cs" />
-    <Compile Include="BusinessLogic\IPersonRelationshipCreator.cs" />
-    <Compile Include="BusinessLogic\IPersonRelationshipRepository.cs" />
-    <Compile Include="BusinessLogic\FakePersonRelationshipRepository.cs" />
+    <Compile Include="BusinessLogic\IPersonRepository.cs" />
+    <Compile Include="BusinessLogic\FakePersonRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BusinessLogic\PersonRelationshipRepository.cs" />
+    <Compile Include="BusinessLogic\PersonRepository.cs" />
     <Compile Include="UnitTests.cs" />
   </ItemGroup>
   <ItemGroup>

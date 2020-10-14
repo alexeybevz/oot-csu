@@ -8,10 +8,10 @@ namespace Homework01
 {
     public class UnitTests
     {
-        static readonly Person _me = new Person("Я", Gender.Male);
         static readonly Person mother = new Person("мама", Gender.Female);
         static readonly Person father = new Person("папа", Gender.Male);
-        static readonly PersonRelationshipRepository _repository = new FakePersonRelationshipRepository().Create(_me, mother, father);
+        static readonly Person _me = new Person("Я", Gender.Male);
+        static readonly PersonRepository _repository = new FakePersonRepository().Create(_me, mother, father);
         
         [Fact]
         public void GetParentSuccessTest()
