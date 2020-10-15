@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Homework01.BusinessLogic;
 using Homework01.Domain;
@@ -8,10 +9,10 @@ namespace Homework01
 {
     public class UnitTests
     {
-        static readonly Person mother = new Person("мама", Gender.Female);
-        static readonly Person father = new Person("папа", Gender.Male);
+        static readonly Person _mother = new Person("мама", Gender.Female);
+        static readonly Person _father = new Person("папа", Gender.Male);
         static readonly Person _me = new Person("Я", Gender.Male);
-        static readonly PersonRepository _repository = new FakePersonRepository().Create(_me, mother, father);
+        static readonly PersonRepository _repository = new FakePersonRepository().Create(_me, _mother, _father);
         
         [Fact]
         public void GetParentSuccessTest()
@@ -82,13 +83,76 @@ namespace Homework01
         [Fact]
         public void GetPartnerParentsSuccessTest()
         {
-            var partnerParents = _repository.GetPartnerParents(mother).Select(x => x.Name).ToList();
+            var partnerParents = _repository.GetPartnerParents(_mother).Select(x => x.Name).ToList();
             var expected = new List<string>()
             {
                 "бабушка папы",
                 "дедушка папы",
             };
             Assert.Equal(ConcatList(expected), ConcatList(partnerParents));
+        }
+
+        [Fact]
+        public void CheckConsistencyWhenAddPartnerTest()
+        {
+            var women = new Person("женщина", Gender.Female);
+
+            var men = new Person("мужчина", Gender.Male);
+            men.CreateRelationshipWith(women);
+
+            Assert.Equal(men, women.Partner);
+        }
+
+        [Fact]
+        public void CheckConsistencyWhenPartnerChangedTest()
+        {
+            var women1 = new Person("женщина1", Gender.Female);
+            var women2 = new Person("женщина2", Gender.Female);
+
+            var men = new Person("мужчина", Gender.Male);
+            men.CreateRelationshipWith(women1);
+            men.CreateRelationshipWith(women2);
+
+            Assert.Equal(null, women1.Partner);
+        }
+
+        [Fact]
+        public void CheckConsistencyWhenMotherChangedTest()
+        {
+            var mother1 = new Person("мама1", Gender.Female);
+            var mother2 = new Person("мама2", Gender.Female);
+            var child = new Person("ребенок", Gender.Male);
+
+            child.SetMother(mother1);
+            child.SetMother(mother2);
+
+            Assert.True(child.Mother == mother2 &&
+                        mother1.Childs.Count == 0 &&
+                        mother2.Childs.Count == 1);
+        }
+
+        [Fact]
+        public void CheckConsistencyWhenFatherChangedTest()
+        {
+            var father1 = new Person("папа1", Gender.Male);
+            var father2 = new Person("папа2", Gender.Male);
+            var child = new Person("ребенок", Gender.Male);
+
+            child.SetMother(father1);
+            child.SetMother(father2);
+
+            Assert.True(child.Mother == father2 &&
+                        father1.Childs.Count == 0 &&
+                        father2.Childs.Count == 1);
+        }
+
+        [Fact]
+        public void DenyAddChildWithoutParentSuccessTest()
+        {
+            var child = new Person("ребенок", Gender.Male);
+            var father1 = new Person("папа", Gender.Male);
+
+            Assert.Throws<ArgumentException>(() => father1.AddChild(child));
         }
 
         private static string ConcatList(List<string> list)

@@ -45,20 +45,11 @@ namespace Homework01.BusinessLogic
             fatherBrotherChild.SetMother(fatherBrotherWife);
             fatherBrotherChild.SetFather(fatherBrother);
 
-            mother.SetPartner(father);
-            father.SetPartner(mother);
-
-            motherSister.SetPartner(motherSisterHusband);
-            motherSisterHusband.SetPartner(motherSister);
-
-            fatherBrotherWife.SetPartner(fatherBrother);
-            fatherBrother.SetPartner(fatherBrotherWife);
-
-            grandMotherM.SetPartner(grandFatherM);
-            grandFatherM.SetPartner(grandMotherM);
-
-            grandMotherF.SetPartner(grandFatherF);
-            grandFatherF.SetPartner(grandMotherF);
+            mother.CreateRelationshipWith(father);
+            motherSister.CreateRelationshipWith(motherSisterHusband);
+            fatherBrotherWife.CreateRelationshipWith(fatherBrother);
+            grandMotherM.CreateRelationshipWith(grandFatherM);
+            grandMotherF.CreateRelationshipWith(grandFatherF);
 
             return new PersonRepository();
         }
