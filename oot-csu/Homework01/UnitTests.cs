@@ -117,6 +117,19 @@ namespace Homework01
         }
 
         [Fact]
+        public void CheckConsistencyWhenOtherPartnerReferToFirstTest()
+        {
+            var women1 = new Person("женщина1", Gender.Female);
+            var women2 = new Person("женщина2", Gender.Female);
+            var men = new Person("мужчина", Gender.Male);
+
+            men.CreateRelationshipWith(women1);
+            women2.CreateRelationshipWith(men);
+
+            Assert.True(women1.Partner == null);
+        }
+
+        [Fact]
         public void CheckConsistencyWhenMotherChangedTest()
         {
             var mother1 = new Person("мама1", Gender.Female);
@@ -153,6 +166,32 @@ namespace Homework01
             var father1 = new Person("папа", Gender.Male);
 
             Assert.Throws<ArgumentException>(() => father1.AddChild(child));
+        }
+
+        [Fact]
+        public void RemoveChildFromParentTest()
+        {
+            var child = new Person("ребенок", Gender.Male);
+            var father = new Person("папа", Gender.Male);
+
+            child.SetFather(father);
+            father.RemoveChild(child);
+
+            Assert.True(child.Father == null);
+        }
+
+        [Fact]
+        public void OneChildCanBeAddOnceToParent()
+        {
+            var child1 = new Person("ребенок", Gender.Male);
+            var father = new Person("папа", Gender.Male);
+
+            child1.SetFather(father);
+
+            father.AddChild(child1);
+            father.AddChild(child1);
+
+            Assert.True(father.Childs.Count == 1);
         }
 
         private static string ConcatList(List<string> list)

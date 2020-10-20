@@ -29,6 +29,9 @@ namespace Homework01.Domain
             if (Partner != null)
                 Partner.Partner = null;
 
+            if (person.Partner != null)
+                person.Partner.Partner = null;
+
             Partner = person;
             person.Partner = this;
         }
@@ -66,7 +69,8 @@ namespace Homework01.Domain
             if (child.Mother != this && child.Father != this)
                 throw new ArgumentException("Нельзя добавить ребенка тому, кто не является его родителем");
 
-            childs.Add(child);
+            if (!(childs.Contains(child)))
+                childs.Add(child);
         }
 
         public void RemoveChild(Person child)
@@ -75,6 +79,12 @@ namespace Homework01.Domain
                 throw new ArgumentException("Передан пустой объект при выполнении действия");
 
             childs.Remove(child);
+
+            if (child.Mother == this)
+                child.Mother = null;
+
+            if (child.Father == this)
+                child.Father = null;
         }
 
         private void ValidPerson(Person person)
