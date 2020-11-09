@@ -1,10 +1,19 @@
-﻿namespace Homework02
+﻿using System.Collections.Generic;
+
+namespace Homework02
 {
-    public class FreeDeliveryPromo : IDeliveryPromo
+    public class FreeDeliveryPromo : IPromo
     {
-        public decimal ApplyPromo(decimal deliveryPrice)
+        public CostPromoPriority Priority { get; }
+
+        public FreeDeliveryPromo(CostPromoPriority priority)
         {
-            return 0;
+            Priority = priority;
+        }
+
+        public void ApplyPromo(ref decimal booksTotalCost, ICollection<BookItem> bookItems, ref decimal deliveryCost)
+        {
+            deliveryCost -= deliveryCost;
         }
     }
 }

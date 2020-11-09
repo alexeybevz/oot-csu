@@ -57,13 +57,13 @@ namespace Homework02
             var bi3 = new ElectronicBookItem(electronicBookDelivery) { Book = b3, Qty = 1 };
 
             var bookVisitors = new List<BookVisitor> { paperBookDelivery, electronicBookDelivery };
-            var costPromos = new List<ICostPromo>()
+            var promos = new List<IPromo>()
             {
                 new DiscountPercent(10, CostPromoPriority.Medium),
                 new DiscountCurrency(200, CostPromoPriority.High),
             };
 
-            var cart = new ShoppingCart(bookVisitors, costPromos);
+            var cart = new ShoppingCart(bookVisitors, promos);
             cart.Add(bi1);
             cart.Add(bi2);
             cart.Add(bi3);
@@ -81,19 +81,16 @@ namespace Homework02
             var bi3 = new ElectronicBookItem(electronicBookDelivery) { Book = b3, Qty = 1 };
 
             var bookVisitors = new List<BookVisitor> { paperBookDelivery, electronicBookDelivery };
-            var costPromos = new List<ICostPromo>()
+            var promos = new List<IPromo>()
             {
                 new DiscountPercent(10, CostPromoPriority.Medium),
                 new DiscountCurrency(200, CostPromoPriority.High),
+                new FreeBookPromo(new Book() { Author = "a1", Title = "b1"}, CostPromoPriority.High),
+                new FreeBookPromo(new Book() { Author = "a3", Title = "b3"}, CostPromoPriority.High),
+                new FreeDeliveryPromo(CostPromoPriority.Medium),
             };
-            var freeBookPromos = new List<IBookPromo>()
-            {
-                new FreeBookPromo(new Book() { Author = "a1", Title = "b1"}),
-                new FreeBookPromo(new Book() { Author = "a3", Title = "b3" })
-            };
-            var freeDeliveryPromo = new FreeDeliveryPromo();
 
-            var cart = new ShoppingCart(bookVisitors, costPromos, freeBookPromos, freeDeliveryPromo);
+            var cart = new ShoppingCart(bookVisitors, promos);
             cart.Add(bi1);
             cart.Add(bi2);
             cart.Add(bi3);

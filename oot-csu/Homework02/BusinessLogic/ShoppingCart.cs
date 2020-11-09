@@ -7,30 +7,13 @@ namespace Homework02
     {
         private readonly List<BookItem> _bookItems;
         private readonly List<BookVisitor> _bookVisitors;
-        private readonly List<ICostPromo> _costPromos;
-        private readonly List<IBookPromo> _bookPromos;
-        private readonly IDeliveryPromo _deliveryPromo;
+        private readonly ICollection<IPromo> _promos;
 
-        public ShoppingCart(List<BookVisitor> bookVisitors)
+        public ShoppingCart(List<BookVisitor> bookVisitors, ICollection<IPromo> promos = null)
         {
             _bookItems = new List<BookItem>();
-            _bookVisitors = bookVisitors;
-        }
-
-        public ShoppingCart(List<BookVisitor> bookVisitors, List<ICostPromo> costPromos)
-        {
-            _bookItems = new List<BookItem>();
-            _bookVisitors = bookVisitors;
-            _costPromos = costPromos.OrderBy(p => p.Priority).ToList();
-        }
-
-        public ShoppingCart(List<BookVisitor> bookVisitors, List<ICostPromo> costPromos, List<IBookPromo> bookPromos, IDeliveryPromo deliveryPromo)
-        {
-            _bookItems = new List<BookItem>();
-            _bookVisitors = bookVisitors;
-            _costPromos = costPromos.OrderBy(p => p.Priority).ToList();
-            _bookPromos = bookPromos;
-            _deliveryPromo = deliveryPromo;
+            _bookVisitors = bookVisitors ?? new List<BookVisitor>();
+            _promos = promos ?? new List<IPromo>();
         }
 
         public void Add(BookItem bookItem)
@@ -52,27 +35,22 @@ namespace Homework02
 
         public decimal GetTotal()
         {
-            decimal totalCost = 0;
-            decimal deliveryPrice = 0;
+            decimal totalBooksCost = 0;
+            decimal deliveryCost = 0;
 
             _bookVisitors?.ForEach(dv => dv.ResetVisitor());
             _bookItems.ForEach(bi => bi.Visit());
 
             _bookVisitors?.ForEach(dv =>
             {
-                totalCost += dv.GetTotalCost();
-                deliveryPrice += dv.GetDeliveryPrice();
+                totalBooksCost += dv.GetTotalCost();
+                deliveryCost += dv.GetDeliveryPrice();
             });
 
-            _bookPromos?.ForEach(bp =>
-                _bookItems.ForEach(bi => totalCost -= bp.ApplyPromo(bi)));
+            foreach (var promo in _promos.OrderBy(x => x.Priority))
+                promo.ApplyPromo(ref totalBooksCost, _bookItems, ref deliveryCost);
 
-            _costPromos?.ForEach(promo => totalCost = promo.ApplyDiscount(totalCost));
-
-            if (_deliveryPromo != null)
-                deliveryPrice = _deliveryPromo.ApplyPromo(deliveryPrice);
-
-            return totalCost + deliveryPrice;
+            return totalBooksCost + deliveryCost;
         }
 
         public List<BookItem> GetOrderedBooks()

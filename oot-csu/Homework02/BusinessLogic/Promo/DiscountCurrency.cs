@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Homework02
 {
-    public class DiscountCurrency : ICostPromo
+    public class DiscountCurrency : IPromo
     {
         private readonly decimal _discount;
         public CostPromoPriority Priority { get; }
@@ -16,10 +17,9 @@ namespace Homework02
             Priority = priority;
         }
 
-        public decimal ApplyDiscount(decimal total)
+        public void ApplyPromo(ref decimal booksTotalCost, ICollection<BookItem> bookItems, ref decimal deliveryCost)
         {
-            var result = total - _discount;
-            return result <= 0 ? 0 : result;
+            booksTotalCost -= booksTotalCost - _discount <= 0 ? booksTotalCost : _discount;
         }
     }
 }

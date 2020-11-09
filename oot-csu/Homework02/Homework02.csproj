@@ -20,6 +20,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <ProjectGuid>{EB15A168-E09F-41B8-970A-4EEADC10288E}</ProjectGuid>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
@@ -41,6 +44,7 @@
     <Compile Include="BusinessLogic\Promo\CostPromoPriority.cs" />
     <Compile Include="BusinessLogic\Promo\DiscountCurrency.cs" />
     <Compile Include="BusinessLogic\Promo\DiscountPercent.cs" />
+    <Compile Include="BusinessLogic\Promo\IPromo.cs" />
     <Compile Include="Domain\Book.cs" />
     <Compile Include="Domain\BookDeliveryVisitor.cs" />
     <Compile Include="Domain\BookItem.cs" />
@@ -54,9 +58,6 @@
     <Compile Include="Domain\PaperBookItem.cs" />
     <Compile Include="BusinessLogic\Promo\FreeBookPromo.cs" />
     <Compile Include="BusinessLogic\Promo\FreeDeliveryPromo.cs" />
-    <Compile Include="BusinessLogic\Promo\IBookPromo.cs" />
-    <Compile Include="BusinessLogic\Promo\ICostPromo.cs" />
-    <Compile Include="BusinessLogic\Promo\IDeliveryPromo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BusinessLogic\ShoppingCart.cs" />
