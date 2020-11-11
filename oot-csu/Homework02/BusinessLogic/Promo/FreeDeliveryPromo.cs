@@ -11,7 +11,7 @@ namespace Homework02
             Priority = priority;
         }
 
-        public void ApplyPromo(ref decimal booksTotalCost, ICollection<BookItem> bookItems, ref decimal deliveryCost)
+        public void ApplyPromo(ref decimal booksTotalCost, ICollection<Book> orderedBooks, ref decimal deliveryCost)
         {
             deliveryCost -= deliveryCost;
         }

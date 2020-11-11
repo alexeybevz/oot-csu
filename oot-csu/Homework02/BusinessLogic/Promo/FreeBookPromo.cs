@@ -19,15 +19,15 @@ namespace Homework02
             Priority = priority;
         }
 
-        public void ApplyPromo(ref decimal booksTotalCost, ICollection<BookItem> bookItems, ref decimal deliveryCost)
+        public void ApplyPromo(ref decimal booksTotalCost, ICollection<Book> orderedBooks, ref decimal deliveryCost)
         {
-            var matchedBookItems = bookItems.Where(b =>
-                b.Book.Author == _freeBook.Author &&
-                b.Book.Title == _freeBook.Title).ToList();
+            var matchedBookItems = orderedBooks.Where(b =>
+                b.Author == _freeBook.Author &&
+                b.Title == _freeBook.Title).ToList();
 
             booksTotalCost -=
                 matchedBookItems.Any() ?
-                matchedBookItems.Sum(b => b.Book.Price)
+                matchedBookItems.Sum(b => b.Price)
                 : 0;
         }
     }

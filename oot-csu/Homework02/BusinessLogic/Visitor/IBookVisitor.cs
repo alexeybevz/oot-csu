@@ -2,10 +2,10 @@
 
 namespace Homework02
 {
-    public interface IBookItemVisitor
+    public interface IBookVisitor
     {
-        void VisitPaperBook(BookItem bookItem);
-        void VisitElectronicBook(BookItem bookItem);
+        void VisitPaperBook(Book book);
+        void VisitDigitalBook(Book book);
         decimal GetDeliveryPrice();
         decimal GetTotalCost();
         void ResetVisitor();

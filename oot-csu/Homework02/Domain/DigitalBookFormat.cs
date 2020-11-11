@@ -1,6 +1,6 @@
 ﻿namespace Homework02
 {
-    public enum ElectronicBookFormat
+    public enum DigitalBookFormat
     {
         pdf,
         epub,
