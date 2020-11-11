@@ -2,9 +2,9 @@
 {
     public class ElectronicBookItem : BookItem
     {
-        public ElectronicBookItem(BookVisitor visitor)
+        public override void Accept(IBookItemVisitor visitor)
         {
-            Visitor = visitor;
+            visitor.VisitElectronicBook(this);
         }
     }
 }

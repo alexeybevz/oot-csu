@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Homework02
@@ -6,13 +7,16 @@ namespace Homework02
     public class ShoppingCart
     {
         private readonly List<BookItem> _bookItems;
-        private readonly List<BookVisitor> _bookVisitors;
+        private readonly IBookItemVisitor _bookItemVisitor;
         private readonly ICollection<IPromo> _promos;
 
-        public ShoppingCart(List<BookVisitor> bookVisitors, ICollection<IPromo> promos = null)
+        public ShoppingCart(IBookItemVisitor bookItemVisitor, ICollection<IPromo> promos = null)
         {
+            if (bookItemVisitor == null)
+                throw new ArgumentException("BookItemVisitor not found");
+
             _bookItems = new List<BookItem>();
-            _bookVisitors = bookVisitors ?? new List<BookVisitor>();
+            _bookItemVisitor = bookItemVisitor;
             _promos = promos ?? new List<IPromo>();
         }
 
@@ -35,17 +39,11 @@ namespace Homework02
 
         public decimal GetTotal()
         {
-            decimal totalBooksCost = 0;
-            decimal deliveryCost = 0;
+            _bookItemVisitor.ResetVisitor();
+            _bookItems.ForEach(bi => bi.Accept(_bookItemVisitor));
 
-            _bookVisitors?.ForEach(dv => dv.ResetVisitor());
-            _bookItems.ForEach(bi => bi.Visit());
-
-            _bookVisitors?.ForEach(dv =>
-            {
-                totalBooksCost += dv.GetTotalCost();
-                deliveryCost += dv.GetDeliveryPrice();
-            });
+            decimal totalBooksCost = _bookItemVisitor.GetTotalCost();
+            decimal deliveryCost = _bookItemVisitor.GetDeliveryPrice();
 
             foreach (var promo in _promos.OrderBy(x => x.Priority))
                 promo.ApplyPromo(ref totalBooksCost, _bookItems, ref deliveryCost);
