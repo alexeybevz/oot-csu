@@ -25,6 +25,12 @@ namespace Homework02
                 _orderedBooks.Add(book);
         }
 
+        public void AddRange(List<Book> books)
+        {
+            if (books != null)
+                _orderedBooks.AddRange(books);
+        }
+
         public void Remove(Book book)
         {
             if (book != null)
@@ -45,6 +51,12 @@ namespace Homework02
         public List<Book> GetOrderedBooks()
         {
             return _orderedBooks;
+        }
+
+        public List<Book> GetExtraFreeBooks()
+        {
+            var cartTotal = _cartTotalsCalculator.GetCartTotals(_orderedBooks);
+            return cartTotal.ExtraFreeBooks;
         }
     }
 }

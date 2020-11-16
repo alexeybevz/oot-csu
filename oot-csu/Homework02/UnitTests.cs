@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using BusinessLogic;
+using BusinessLogic.Promo;
+using Moq;
 using Xunit;
 
 namespace Homework02
@@ -74,6 +77,41 @@ namespace Homework02
             cart.Add(b2);
             cart.Add(b3);
             Assert.Equal(270, cart.GetTotal());
+        }
+
+        [Fact]
+        public void AddFreeDigitalBookOnEachSecondPaperBookTest()
+        {
+            var bookRepository = new Mock<IBookRepository>();
+
+            bookRepository
+                .Setup(x => x.GetBooks())
+                .Returns(new List<Book>()
+                {
+                    new PaperBook() { Author = "a2", Title = "b4", Price = 300 },
+                    new PaperBook() { Author = "a2", Title = "b5", Price = 400 },
+                    new PaperBook() { Author = "a2", Title = "b6", Price = 500 },
+                    new DigitalBook() { Author = "a2", Title = "d1", Price = 500 },
+                    new DigitalBook() { Author = "a2", Title = "d2", Price = 300 },
+                });
+
+            List<Book> orderedBooks = new List<Book>()
+            {
+                new PaperBook() { Author = "a1", Title = "bb1", Price = 100, Qty = 1 },
+                new PaperBook() { Author = "a1", Title = "bb2", Price = 100, Qty = 1 },
+                new PaperBook() { Author = "a2", Title = "b1", Price = 200, Qty = 1 },
+                new PaperBook() { Author = "a2", Title = "b2", Price = 200, Qty = 1 },
+                new PaperBook() { Author = "a2", Title = "b3", Price = 300, Qty = 1 },
+            };
+
+            var promos = new List<IPromo>()
+            {
+                new ExtraFreeBooksPromo(bookRepository.Object),
+            };
+
+            var cart = new ShoppingCart(new CartTotalsCalculator(promos));
+            cart.AddRange(orderedBooks);
+            Assert.Equal(orderedBooks.Count + 1, cart.GetOrderedBooks().Count + cart.GetExtraFreeBooks().Count);
         }
     }
 }

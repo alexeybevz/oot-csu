@@ -9,7 +9,8 @@ namespace BusinessLogic.Promo
         private decimal _bookTotalCost;
         private decimal _deliveryCost;
 
-        public IEnumerable<Book> OrderedBooks { get; set; }
+        public IEnumerable<Book> OrderedBooks { get; set; } = new List<Book>();
+        public List<Book> ExtraFreeBooks { get; set; } = new List<Book>();
 
         public decimal BooksTotalCost
         {
