@@ -1,6 +1,6 @@
 ﻿namespace Homework02
 {
-    public class BaseBookVisitor : IBookVisitor
+    public class CartTotalsCalculator : ICartTotalsCalculator
     {
         private decimal _totalCost;
         private decimal _totalCostPaperBooks;

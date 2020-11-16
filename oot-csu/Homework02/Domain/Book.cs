@@ -6,6 +6,6 @@
         public string Author { get; set; }
         public decimal Price { get; set; }
         public decimal Qty { get; set; } = 1;
-        public abstract void Accept(IBookVisitor visitor);
+        public abstract void Accept(ICartTotalsCalculator cartTotalsCalculator);
     }
 }

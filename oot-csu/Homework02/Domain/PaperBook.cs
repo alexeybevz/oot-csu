@@ -4,9 +4,9 @@
     {
         public BookCover Cover { get; set; }
 
-        public override void Accept(IBookVisitor visitor)
+        public override void Accept(ICartTotalsCalculator cartTotalsCalculator)
         {
-            visitor.VisitPaperBook(this);
+            cartTotalsCalculator.VisitPaperBook(this);
         }
     }
 }

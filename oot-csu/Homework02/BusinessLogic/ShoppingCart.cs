@@ -8,16 +8,16 @@ namespace Homework02
     public class ShoppingCart
     {
         private readonly List<Book> _orderedBooks;
-        private readonly IBookVisitor _bookVisitor;
+        private readonly ICartTotalsCalculator _cartTotalsCalculator;
         private readonly ICollection<IPromo> _promos;
 
-        public ShoppingCart(IBookVisitor bookVisitor, ICollection<IPromo> promos = null)
+        public ShoppingCart(ICartTotalsCalculator cartTotalsCalculator, ICollection<IPromo> promos = null)
         {
-            if (bookVisitor == null)
+            if (cartTotalsCalculator == null)
                 throw new ArgumentException("BookItemVisitor not found");
 
             _orderedBooks = new List<Book>();
-            _bookVisitor = bookVisitor;
+            _cartTotalsCalculator = cartTotalsCalculator;
             _promos = promos ?? new List<IPromo>();
         }
 
@@ -40,14 +40,14 @@ namespace Homework02
 
         public decimal GetTotal()
         {
-            _bookVisitor.ResetVisitor();
-            _orderedBooks.ForEach(bi => bi.Accept(_bookVisitor));
+            _cartTotalsCalculator.ResetVisitor();
+            _orderedBooks.ForEach(bi => bi.Accept(_cartTotalsCalculator));
 
             var cartTotal = new CartTotals()
             {
-                BooksTotalCost = _bookVisitor.GetTotalCost(),
+                BooksTotalCost = _cartTotalsCalculator.GetTotalCost(),
                 OrderedBooks = _orderedBooks,
-                DeliveryCost = _bookVisitor.GetDeliveryPrice(),
+                DeliveryCost = _cartTotalsCalculator.GetDeliveryPrice(),
             };
 
             foreach (var promo in _promos.OrderBy(x => x.Priority))

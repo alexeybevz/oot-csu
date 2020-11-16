@@ -4,9 +4,9 @@
     {
         public DigitalBookFormat Format { get; set; }
 
-        public override void Accept(IBookVisitor visitor)
+        public override void Accept(ICartTotalsCalculator cartTotalsCalculator)
         {
-            visitor.VisitDigitalBook(this);
+            cartTotalsCalculator.VisitDigitalBook(this);
         }
     }
 }

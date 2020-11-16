@@ -1,6 +1,6 @@
 ﻿namespace Homework02
 {
-    public interface IBookVisitor
+    public interface ICartTotalsCalculator
     {
         void VisitPaperBook(Book book);
         void VisitDigitalBook(Book book);
