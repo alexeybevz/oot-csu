@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Homework02
+﻿namespace Homework02
 {
     public interface IBookVisitor
     {

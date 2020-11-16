@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using BusinessLogic.Promo;
 
 namespace Homework02
 {
@@ -11,9 +11,9 @@ namespace Homework02
             Priority = priority;
         }
 
-        public void ApplyPromo(ref decimal booksTotalCost, IEnumerable<Book> orderedBooks, ref decimal deliveryCost)
+        public void ApplyPromo(CartTotals cartTotals)
         {
-            deliveryCost -= deliveryCost;
+            cartTotals.DeliveryCost -= cartTotals.DeliveryCost;
         }
     }
 }

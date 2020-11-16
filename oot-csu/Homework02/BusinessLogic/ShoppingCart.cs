@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BusinessLogic.Promo;
 
 namespace Homework02
 {
@@ -42,13 +43,17 @@ namespace Homework02
             _bookVisitor.ResetVisitor();
             _orderedBooks.ForEach(bi => bi.Accept(_bookVisitor));
 
-            decimal totalBooksCost = _bookVisitor.GetTotalCost();
-            decimal deliveryCost = _bookVisitor.GetDeliveryPrice();
+            var cartTotal = new CartTotals()
+            {
+                BooksTotalCost = _bookVisitor.GetTotalCost(),
+                OrderedBooks = _orderedBooks,
+                DeliveryCost = _bookVisitor.GetDeliveryPrice(),
+            };
 
             foreach (var promo in _promos.OrderBy(x => x.Priority))
-                promo.ApplyPromo(ref totalBooksCost, _orderedBooks, ref deliveryCost);
+                promo.ApplyPromo(cartTotal);
 
-            return totalBooksCost + deliveryCost;
+            return cartTotal.BooksTotalCost + cartTotal.DeliveryCost;
         }
 
         public List<Book> GetOrderedBooks()

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using BusinessLogic.Promo;
 
 namespace Homework02
 {
@@ -19,16 +19,14 @@ namespace Homework02
             Priority = priority;
         }
 
-        public void ApplyPromo(ref decimal booksTotalCost, IEnumerable<Book> orderedBooks, ref decimal deliveryCost)
+        public void ApplyPromo(CartTotals cartTotals)
         {
-            var matchedBookItems = orderedBooks.Where(b =>
+            var matchedBookItems = cartTotals.OrderedBooks.Where(b =>
                 b.Author == _freeBook.Author &&
                 b.Title == _freeBook.Title).ToList();
 
-            booksTotalCost -=
-                matchedBookItems.Any() ?
-                matchedBookItems.Sum(b => b.Price)
-                : 0;
+            if (matchedBookItems.Any())
+                cartTotals.BooksTotalCost -= matchedBookItems.Sum(b => b.Price);
         }
     }
 }

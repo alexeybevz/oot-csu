@@ -41,6 +41,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\Promo\CartTotals.cs" />
     <Compile Include="BusinessLogic\Promo\CostPromoPriority.cs" />
     <Compile Include="BusinessLogic\Promo\DiscountCurrency.cs" />
     <Compile Include="BusinessLogic\Promo\DiscountPercent.cs" />
