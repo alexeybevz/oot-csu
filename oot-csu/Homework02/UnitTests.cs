@@ -5,8 +5,6 @@ namespace Homework02
 {
     public class UnitTests
     {
-        ICartTotalsCalculator cartTotalsCalculator = new CartTotalsCalculator();
-
         [Fact]
         public void OrderNotFreeDeliveryTest()
         {
@@ -14,7 +12,7 @@ namespace Homework02
             var b2 = new PaperBook() { Title = "b2", Price = 100 };
             var b3 = new DigitalBook() { Title = "b3", Price = 400 };
 
-            var cart = new ShoppingCart(cartTotalsCalculator);
+            var cart = new ShoppingCart(new CartTotalsCalculator());
             cart.Add(b1);
             cart.Add(b2);
             cart.Add(b3);
@@ -28,7 +26,7 @@ namespace Homework02
             var b2 = new PaperBook() { Title = "b2", Price = 100 };
             var b3 = new DigitalBook() { Title = "b3", Price = 400 };
 
-            var cart = new ShoppingCart(cartTotalsCalculator);
+            var cart = new ShoppingCart(new CartTotalsCalculator());
             cart.Add(b1);
             cart.Add(b2);
             cart.Add(b3);
@@ -48,7 +46,7 @@ namespace Homework02
                 new DiscountCurrency(200, CostPromoPriority.High),
             };
 
-            var cart = new ShoppingCart(cartTotalsCalculator, promos);
+            var cart = new ShoppingCart(new CartTotalsCalculator(promos));
             cart.Add(b1);
             cart.Add(b2);
             cart.Add(b3);
@@ -71,7 +69,7 @@ namespace Homework02
                 new FreeDeliveryPromo(CostPromoPriority.Medium),
             };
 
-            var cart = new ShoppingCart(cartTotalsCalculator, promos);
+            var cart = new ShoppingCart(new CartTotalsCalculator(promos));
             cart.Add(b1);
             cart.Add(b2);
             cart.Add(b3);

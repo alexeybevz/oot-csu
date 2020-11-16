@@ -9,16 +9,14 @@ namespace Homework02
     {
         private readonly List<Book> _orderedBooks;
         private readonly ICartTotalsCalculator _cartTotalsCalculator;
-        private readonly ICollection<IPromo> _promos;
 
-        public ShoppingCart(ICartTotalsCalculator cartTotalsCalculator, ICollection<IPromo> promos = null)
+        public ShoppingCart(ICartTotalsCalculator cartTotalsCalculator)
         {
             if (cartTotalsCalculator == null)
                 throw new ArgumentException("BookItemVisitor not found");
 
             _orderedBooks = new List<Book>();
             _cartTotalsCalculator = cartTotalsCalculator;
-            _promos = promos ?? new List<IPromo>();
         }
 
         public void Add(Book book)
@@ -40,19 +38,7 @@ namespace Homework02
 
         public decimal GetTotal()
         {
-            _cartTotalsCalculator.ResetVisitor();
-            _orderedBooks.ForEach(bi => bi.Accept(_cartTotalsCalculator));
-
-            var cartTotal = new CartTotals()
-            {
-                BooksTotalCost = _cartTotalsCalculator.GetTotalCost(),
-                OrderedBooks = _orderedBooks,
-                DeliveryCost = _cartTotalsCalculator.GetDeliveryPrice(),
-            };
-
-            foreach (var promo in _promos.OrderBy(x => x.Priority))
-                promo.ApplyPromo(cartTotal);
-
+            var cartTotal = _cartTotalsCalculator.GetCartTotals(_orderedBooks);
             return cartTotal.BooksTotalCost + cartTotal.DeliveryCost;
         }
 
