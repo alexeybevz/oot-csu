@@ -49,10 +49,11 @@ namespace Homework02
                 new DiscountCurrency(200, CostPromoPriority.High),
             };
 
-            var cart = new ShoppingCart(new CartTotalsCalculator(promos));
+            var cart = new ShoppingCart(new CartTotalsCalculator());
             cart.Add(b1);
             cart.Add(b2);
             cart.Add(b3);
+            cart.AddRange(promos);
             Assert.Equal(1530, cart.GetTotal());
         }
 
@@ -72,10 +73,11 @@ namespace Homework02
                 new FreeDeliveryPromo(CostPromoPriority.Medium),
             };
 
-            var cart = new ShoppingCart(new CartTotalsCalculator(promos));
+            var cart = new ShoppingCart(new CartTotalsCalculator());
             cart.Add(b1);
             cart.Add(b2);
             cart.Add(b3);
+            cart.AddRange(promos);
             Assert.Equal(270, cart.GetTotal());
         }
 

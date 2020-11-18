@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using BusinessLogic.Promo;
 
 namespace Homework02
 {
@@ -9,14 +7,16 @@ namespace Homework02
     {
         private readonly List<Book> _orderedBooks;
         private readonly ICartTotalsCalculator _cartTotalsCalculator;
+        private readonly List<IPromo> _promos;
 
         public ShoppingCart(ICartTotalsCalculator cartTotalsCalculator)
         {
             if (cartTotalsCalculator == null)
-                throw new ArgumentException("BookItemVisitor not found");
+                throw new ArgumentException("CartTotalsCalculator not found");
 
             _orderedBooks = new List<Book>();
             _cartTotalsCalculator = cartTotalsCalculator;
+            _promos = new List<IPromo>();
         }
 
         public void Add(Book book)
@@ -25,16 +25,34 @@ namespace Homework02
                 _orderedBooks.Add(book);
         }
 
+        public void Add(IPromo promo)
+        {
+            if (promo != null)
+                _promos.Add(promo);
+        }
+
         public void AddRange(List<Book> books)
         {
             if (books != null)
                 _orderedBooks.AddRange(books);
         }
 
+        public void AddRange(List<IPromo> promos)
+        {
+            if (promos != null)
+                _promos.AddRange(promos);
+        }
+
         public void Remove(Book book)
         {
             if (book != null)
                 _orderedBooks.Remove(book);
+        }
+
+        public void Remove(IPromo promo)
+        {
+            if (promo != null)
+                _promos.Remove(promo);
         }
 
         public void Clear()
@@ -44,7 +62,7 @@ namespace Homework02
 
         public decimal GetTotal()
         {
-            var cartTotal = _cartTotalsCalculator.GetCartTotals(_orderedBooks);
+            var cartTotal = _cartTotalsCalculator.GetCartTotals(_orderedBooks, _promos);
             return cartTotal.BooksTotalCost + cartTotal.DeliveryCost;
         }
 
@@ -55,7 +73,7 @@ namespace Homework02
 
         public List<Book> GetExtraFreeBooks()
         {
-            var cartTotal = _cartTotalsCalculator.GetCartTotals(_orderedBooks);
+            var cartTotal = _cartTotalsCalculator.GetCartTotals(_orderedBooks, _promos);
             return cartTotal.ExtraFreeBooks;
         }
     }

@@ -6,13 +6,25 @@ namespace Homework02
 {
     public class CartTotalsCalculator : ICartTotalsCalculator
     {
-        private readonly ICollection<IPromo> _promos;
+        private readonly ICollection<IPromo> _permanentPromos;
         private decimal _totalCost;
         private decimal _totalCostPaperBooks;
 
-        public CartTotalsCalculator(ICollection<IPromo> promos = null)
+        public CartTotalsCalculator(ICollection<IPromo> permanentPromos = null)
         {
-            _promos = promos ?? new List<IPromo>();
+            _permanentPromos = permanentPromos ?? new List<IPromo>();
+        }
+
+        public void Add(IPromo promo)
+        {
+            if (promo != null)
+                _permanentPromos.Add(promo);
+        }
+
+        public void Remove(IPromo promo)
+        {
+            if (promo != null)
+                _permanentPromos.Remove(promo);
         }
 
         public void VisitPaperBook(Book book)
@@ -33,7 +45,7 @@ namespace Homework02
             _totalCost += GetBookCost(book);
         }
 
-        public CartTotals GetCartTotals(IEnumerable<Book> orderedBooks)
+        public CartTotals GetCartTotals(IEnumerable<Book> orderedBooks, IEnumerable<IPromo> shoppingCartPromos)
         {
             ResetVisitor();
             foreach (var orderedBook in orderedBooks)
@@ -46,7 +58,9 @@ namespace Homework02
                 DeliveryCost = GetDeliveryPrice(),
             };
 
-            foreach (var promo in _promos.OrderBy(x => x.Priority))
+            var promos = _permanentPromos.Union(shoppingCartPromos);
+
+            foreach (var promo in promos.OrderBy(x => x.Priority))
                 promo.ApplyPromo(cartTotal);
 
             return cartTotal;
