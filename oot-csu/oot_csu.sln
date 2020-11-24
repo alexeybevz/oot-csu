@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToeGame", "TicTacToe\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homework02", "Homework02\Homework02.csproj", "{EB15A168-E09F-41B8-970A-4EEADC10288E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homework03", "Homework03\Homework03.csproj", "{7720B145-3FFA-4A3A-AABD-A3A579C27D11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -27,6 +29,10 @@ Global
 		{EB15A168-E09F-41B8-970A-4EEADC10288E}.Debug|x64.Build.0 = Debug|x64
 		{EB15A168-E09F-41B8-970A-4EEADC10288E}.Release|x64.ActiveCfg = Release|x64
 		{EB15A168-E09F-41B8-970A-4EEADC10288E}.Release|x64.Build.0 = Release|x64
+		{7720B145-3FFA-4A3A-AABD-A3A579C27D11}.Debug|x64.ActiveCfg = Debug|x64
+		{7720B145-3FFA-4A3A-AABD-A3A579C27D11}.Debug|x64.Build.0 = Debug|x64
+		{7720B145-3FFA-4A3A-AABD-A3A579C27D11}.Release|x64.ActiveCfg = Release|x64
+		{7720B145-3FFA-4A3A-AABD-A3A579C27D11}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
