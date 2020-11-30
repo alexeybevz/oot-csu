@@ -7,26 +7,23 @@ namespace Homework03
 {
     public class BinarySearchTree<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        private readonly List<Node> _tree;
+        private Node _root;
 
-        public BinarySearchTree()
-        {
-            _tree = new List<Node>();
-        }
-
-        private Node GetRootNode()
-        {
-            return _tree.FirstOrDefault();
-        }
+        public ICollection<TKey> Keys => this.Select(x => x.Key).ToList();
+        public ICollection<TValue> Values => this.Select(x => x.Value).ToList();
 
         public void Add(TKey key, TValue value)
         {
             var item = new KeyValuePair<TKey, TValue>(key, value);
             var node = new Node() { Data = item };
 
-            Insert(GetRootNode(), node);
+            if (_root == null)
+            {
+                _root = node;
+                return;
+            }
 
-            _tree.Add(node);
+            Insert(_root, node);
         }
 
         public void Add(KeyValuePair<TKey, TValue> item)
@@ -56,7 +53,7 @@ namespace Homework03
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
             var result = new List<KeyValuePair<TKey, TValue>>();
-            PreOrderTraversal(result, GetRootNode());
+            PreOrderTraversal(result, _root);
             return result.GetEnumerator();
         }
 
@@ -88,7 +85,7 @@ namespace Homework03
 
         private Node Next(TKey key)
         {
-            Node current = GetRootNode();
+            Node current = _root;
             Node successor = null;
 
             while (current != null)
@@ -109,7 +106,7 @@ namespace Homework03
 
         public bool Remove(TKey key)
         {
-            var node = Search(GetRootNode(), key);
+            var node = Search(_root, key);
             var parent = node.Parent;
 
             // I: удаляемый элемент - лист
@@ -209,9 +206,6 @@ namespace Homework03
             get { throw new System.NotImplementedException(); }
             set { throw new System.NotImplementedException(); }
         }
-
-        public ICollection<TKey> Keys { get; }
-        public ICollection<TValue> Values { get; }
 
         private class Node
         {

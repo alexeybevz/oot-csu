@@ -75,5 +75,29 @@ namespace Homework03
             var actual = GetActual();
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void TryGetKeys()
+        {
+            var treeTest = new BinarySearchTree<int, int>()
+            {
+                {1, 2},
+                {3, 4},
+            };
+
+            Assert.Equal(new List<int>() { 1, 3 }, treeTest.Keys);
+        }
+
+        [Fact]
+        public void TryGetValues()
+        {
+            var treeTest = new BinarySearchTree<int, int>()
+            {
+                {1, 2},
+                {3, 4},
+            };
+
+            Assert.Equal(new List<int>() { 2, 4 }, treeTest.Values);
+        }
     }
 }
