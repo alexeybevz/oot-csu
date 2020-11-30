@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,10 +42,12 @@ namespace Homework03
             if (Comparer<TKey>.Default.Compare(node.Data.Key, parent.Data.Key) == -1)
             {
                 parent.Left = Insert(parent.Left, node);
+                parent.Left.Parent = parent;
             }
             else
             {
                 parent.Right = Insert(parent.Right, node);
+                parent.Right.Parent = parent;
             }
 
             return parent;
@@ -72,6 +75,107 @@ namespace Homework03
             PreOrderTraversal(list, node.Right);
         }
 
+        private Node Search(Node parent, TKey searchKey)
+        {
+            if (parent == null || Comparer<TKey>.Default.Compare(searchKey, parent.Data.Key) == 0)
+                return parent;
+
+            if (Comparer<TKey>.Default.Compare(searchKey, parent.Data.Key) == -1)
+                return Search(parent.Left, searchKey);
+            else
+                return Search(parent.Right, searchKey);
+        }
+
+        private Node Next(TKey key)
+        {
+            Node current = GetRootNode();
+            Node successor = null;
+
+            while (current != null)
+            {
+                if (Comparer<TKey>.Default.Compare(current.Data.Key, key) > 0)
+                {
+                    successor = current;
+                    current = current.Left;
+                }
+                else
+                {
+                    current = current.Right;
+                }
+            }
+
+            return successor;
+        }
+
+        public bool Remove(TKey key)
+        {
+            var node = Search(GetRootNode(), key);
+            var parent = node.Parent;
+
+            // I: удаляемый элемент - лист
+            if (node.Left == null && node.Right == null)
+            {
+                if (parent.Left == node)
+                    parent.Left = null;
+                if (parent.Right == node)
+                    parent.Right = null;
+                return true;
+            }
+
+            // II: удаляемый элемент - имеет одного потомка
+            if (node.Left == null || node.Right == null)
+            {
+                if (node.Left == null)
+                {
+                    if (parent.Left == node)
+                        parent.Left = node.Right;
+                    else
+                        parent.Right = node.Right;
+
+                    node.Right.Parent = node.Parent;
+                }
+                else
+                {
+                    if (parent.Left == node)
+                        parent.Left = node.Left;
+                    else
+                        parent.Right = node.Left;
+
+                    node.Left.Parent = node.Parent;
+                }
+
+                return true;
+            }
+
+            // III: удаляемый элемент - имеет двух потомков
+            if (node.Left != null && node.Right != null)
+            {
+                var successor = Next(key);
+                node.Data = successor.Data;
+                if (successor.Parent.Left == successor)
+                {
+                    successor.Parent.Left = successor.Right;
+                    if (successor.Right != null)
+                        successor.Right.Parent = successor.Parent;
+                }
+                else
+                {
+                    successor.Parent.Right = successor.Left;
+                    if (successor.Left != null)
+                        successor.Right.Parent = successor.Parent;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Remove(KeyValuePair<TKey, TValue> item)
+        {
+            return Remove(item.Key);
+        }
+
         public void Clear()
         {
             throw new System.NotImplementedException();
@@ -87,20 +191,10 @@ namespace Homework03
             throw new System.NotImplementedException();
         }
 
-        public bool Remove(KeyValuePair<TKey, TValue> item)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public int Count { get; }
         public bool IsReadOnly { get; }
 
         public bool ContainsKey(TKey key)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool Remove(TKey key)
         {
             throw new System.NotImplementedException();
         }
@@ -124,6 +218,7 @@ namespace Homework03
             public KeyValuePair<TKey, TValue> Data { get; set; }
             public Node Left { get; set; }
             public Node Right { get; set; }
+            public Node Parent { get; set; }
         }
     }
 }
