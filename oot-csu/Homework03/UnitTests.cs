@@ -154,5 +154,51 @@ namespace Homework03
         {
             Assert.False(tree.Contains(new KeyValuePair<int, int>(7, 777)));
         }
+
+        [Fact]
+        public void TryGetValueToNodeExistsKey()
+        {
+            var treeTest = new BinarySearchTree<int, int>() { { 1, 12 } };
+            Assert.Equal(12, treeTest[1]);
+        }
+
+        [Fact]
+        public void TrySetValueToNodeExistsKey()
+        {
+            var treeTest = new BinarySearchTree<int, int>() { { 1, 12 } };
+            treeTest[1] = 6;
+            Assert.Equal(6, treeTest[1]);
+        }
+
+        [Fact]
+        public void TryGetValueToNodeNotExistsKey()
+        {
+            Assert.Throws<KeyNotFoundException>(() => new BinarySearchTree<int, int>()[2]);
+        }
+
+        [Fact]
+        public void TrySetValueToNodeNotExistsKey()
+        {
+            var treeTest = new BinarySearchTree<int, int>();
+            Assert.Throws<KeyNotFoundException>(() => treeTest[2] = 6);
+        }
+
+        [Fact]
+        public void TryGetValueMethodIsTrue()
+        {
+            var treeTest = new BinarySearchTree<int, int>() { { 1, 12 } };
+            int value;
+            var isTrySuccess = treeTest.TryGetValue(1, out value);
+            Assert.True(isTrySuccess && value == 12);
+        }
+
+        [Fact]
+        public void TryGetValueMethodIsFalse()
+        {
+            var treeTest = new BinarySearchTree<int, int>();
+            int value = 1;
+            var isTrySuccess = treeTest.TryGetValue(1, out value);
+            Assert.True(!isTrySuccess && value == 0);
+        }
     }
 }

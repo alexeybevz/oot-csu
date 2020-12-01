@@ -172,13 +172,27 @@ namespace Homework03
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            throw new System.NotImplementedException();
+            var node = Search(_root, key);
+            value = node == null ? default(TValue) : this[key];
+            return node != null;
         }
 
         public TValue this[TKey key]
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get
+            {
+                var node = Search(_root, key);
+                if (node == null)
+                    throw new KeyNotFoundException($"The given key '{key}' not exists");
+                return node.Data.Value;
+            }
+            set
+            {
+                var node = Search(_root, key);
+                if (node == null)
+                    throw new KeyNotFoundException($"The given key '{key}' not exists");
+                node.Data = new KeyValuePair<TKey, TValue>(key, value);
+            }
         }
 
         private class Node
