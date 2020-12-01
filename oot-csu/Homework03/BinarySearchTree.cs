@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -165,11 +166,6 @@ namespace Homework03
             return Search(_root, key) != null;
         }
 
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public bool TryGetValue(TKey key, out TValue value)
         {
             var node = Search(_root, key);
@@ -192,6 +188,25 @@ namespace Homework03
                 if (node == null)
                     throw new KeyNotFoundException($"The given key '{key}' not exists");
                 node.Data = new KeyValuePair<TKey, TValue>(key, value);
+            }
+        }
+
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        {
+            if (array == null)
+                throw new ArgumentNullException($"Array is null");
+
+            if (arrayIndex < 0)
+                throw new ArgumentOutOfRangeException($"Index is less than zero");
+            
+            if (Keys.Count > (array.Length - arrayIndex))
+                throw  new ArgumentException("The number of elements in the source collection is greater than " +
+                                             "the available space from index to the end of the destination array");
+
+            foreach (var keyValuePair in this)
+            {
+                array[arrayIndex] = keyValuePair;
+                arrayIndex++;
             }
         }
 

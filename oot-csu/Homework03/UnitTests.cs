@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Homework03
@@ -199,6 +201,22 @@ namespace Homework03
             int value = 1;
             var isTrySuccess = treeTest.TryGetValue(1, out value);
             Assert.True(!isTrySuccess && value == 0);
+        }
+
+        [Fact]
+        public void TryTreeCopyToSuccess()
+        {
+            var expected = GetActual();
+            var actual = new KeyValuePair<int, int>[tree.Count];
+            tree.CopyTo(actual, 0);
+            Assert.Equal(expected.Count, actual.Length);
+        }
+
+        [Fact]
+        public void TryTreeCopyToFail()
+        {
+            var arr = new KeyValuePair<int, int>[8];
+            Assert.Throws<ArgumentException>(() => tree.CopyTo(arr, 0));
         }
     }
 }
