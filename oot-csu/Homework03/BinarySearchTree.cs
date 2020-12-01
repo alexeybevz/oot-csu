@@ -11,6 +11,8 @@ namespace Homework03
 
         public ICollection<TKey> Keys => this.Select(x => x.Key).ToList();
         public ICollection<TValue> Values => this.Select(x => x.Value).ToList();
+        public int Count => Keys.Count;
+        public bool IsReadOnly => false;
 
         public void Add(TKey key, TValue value)
         {
@@ -107,65 +109,38 @@ namespace Homework03
         public bool Remove(TKey key)
         {
             var node = Search(_root, key);
-            var parent = node.Parent;
+            if (node == null)
+                return false;
 
-            // I: удаляемый элемент - лист
             if (node.Left == null && node.Right == null)
-            {
-                if (parent.Left == node)
-                    parent.Left = null;
-                if (parent.Right == node)
-                    parent.Right = null;
-                return true;
-            }
+                SetDeletedNodeChildToNewParent(node.Parent, node, null);
 
-            // II: удаляемый элемент - имеет одного потомка
-            if (node.Left == null || node.Right == null)
-            {
-                if (node.Left == null)
-                {
-                    if (parent.Left == node)
-                        parent.Left = node.Right;
-                    else
-                        parent.Right = node.Right;
+            if (node.Left == null && node.Right != null)
+                SetDeletedNodeChildToNewParent(node.Parent, node, node.Right);
+            if (node.Left != null & node.Right == null)
+                SetDeletedNodeChildToNewParent(node.Parent, node, node.Left);
 
-                    node.Right.Parent = node.Parent;
-                }
-                else
-                {
-                    if (parent.Left == node)
-                        parent.Left = node.Left;
-                    else
-                        parent.Right = node.Left;
-
-                    node.Left.Parent = node.Parent;
-                }
-
-                return true;
-            }
-
-            // III: удаляемый элемент - имеет двух потомков
             if (node.Left != null && node.Right != null)
             {
                 var successor = Next(key);
                 node.Data = successor.Data;
-                if (successor.Parent.Left == successor)
-                {
-                    successor.Parent.Left = successor.Right;
-                    if (successor.Right != null)
-                        successor.Right.Parent = successor.Parent;
-                }
-                else
-                {
-                    successor.Parent.Right = successor.Left;
-                    if (successor.Left != null)
-                        successor.Right.Parent = successor.Parent;
-                }
 
-                return true;
+                SetDeletedNodeChildToNewParent(successor.Parent, successor, successor.Right);
+                SetDeletedNodeChildToNewParent(successor.Parent, successor, successor.Left);
             }
 
-            return false;
+            return true;
+        }
+
+        private void SetDeletedNodeChildToNewParent(Node parent, Node deleted, Node child)
+        {
+            if (parent?.Left == deleted)
+                parent.Left = child;
+            if (parent?.Right == deleted)
+                parent.Right = child;
+
+            if (child != null && deleted != null)
+                child.Parent = deleted.Parent;
         }
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
@@ -175,7 +150,7 @@ namespace Homework03
 
         public void Clear()
         {
-            throw new System.NotImplementedException();
+            _root = null;
         }
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
@@ -187,9 +162,6 @@ namespace Homework03
         {
             throw new System.NotImplementedException();
         }
-
-        public int Count { get; }
-        public bool IsReadOnly { get; }
 
         public bool ContainsKey(TKey key)
         {

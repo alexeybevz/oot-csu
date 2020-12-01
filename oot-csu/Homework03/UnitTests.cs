@@ -77,6 +77,16 @@ namespace Homework03
         }
 
         [Fact]
+        public void RemoveRootNode()
+        {
+            tree.Remove(8);
+
+            var expected = new List<int>() { 10, 3, 1, 6, 4, 7, 14, 13 };
+            var actual = GetActual();
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void TryGetKeys()
         {
             var treeTest = new BinarySearchTree<int, int>()
@@ -98,6 +108,19 @@ namespace Homework03
             };
 
             Assert.Equal(new List<int>() { 2, 4 }, treeTest.Values);
+        }
+
+        [Fact]
+        public void TryClearTree()
+        {
+            var treeTest = new BinarySearchTree<int, int>()
+            {
+                {1, 2},
+                {3, 4},
+            };
+
+            treeTest.Clear();
+            Assert.Equal(0, treeTest.Keys.Count);
         }
     }
 }
