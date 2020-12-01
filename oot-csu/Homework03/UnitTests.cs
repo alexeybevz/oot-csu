@@ -130,5 +130,29 @@ namespace Homework03
             Assert.Throws<InsertDuplicateKeyException>(() => treeTest.Add(1, 2));
             Assert.True(treeTest.Keys.Count == 1);
         }
+
+        [Fact]
+        public void TryContainsKeyIsTrue()
+        {
+            Assert.True(tree.ContainsKey(7));
+        }
+
+        [Fact]
+        public void TryContainsKeyIsFalse()
+        {
+            Assert.False(tree.ContainsKey(999));
+        }
+
+        [Fact]
+        public void TryContainsKeyValueIsTrue()
+        {
+            Assert.True(tree.Contains(new KeyValuePair<int, int>(7, 7)));
+        }
+
+        [Fact]
+        public void TryContainsKeyValueIsFalse()
+        {
+            Assert.False(tree.Contains(new KeyValuePair<int, int>(7, 777)));
+        }
     }
 }

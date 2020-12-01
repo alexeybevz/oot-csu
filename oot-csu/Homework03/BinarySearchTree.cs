@@ -156,15 +156,16 @@ namespace Homework03
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
-        {
-            throw new System.NotImplementedException();
+            var searchedNode = Search(_root, item.Key);
+            return searchedNode != null && Comparer<TValue>.Default.Compare(searchedNode.Data.Value, item.Value) == 0;
         }
 
         public bool ContainsKey(TKey key)
+        {
+            return Search(_root, key) != null;
+        }
+
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             throw new System.NotImplementedException();
         }
