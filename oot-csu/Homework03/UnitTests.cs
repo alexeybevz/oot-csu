@@ -122,5 +122,13 @@ namespace Homework03
             treeTest.Clear();
             Assert.Equal(0, treeTest.Keys.Count);
         }
+
+        [Fact]
+        public void TryAddExistsKeyInTree()
+        {
+            var treeTest = new BinarySearchTree<int, int>() { {1, 1} };
+            Assert.Throws<InsertDuplicateKeyException>(() => treeTest.Add(1, 2));
+            Assert.True(treeTest.Keys.Count == 1);
+        }
     }
 }

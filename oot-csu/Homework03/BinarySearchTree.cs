@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,11 +42,13 @@ namespace Homework03
                 parent.Left = Insert(parent.Left, node);
                 parent.Left.Parent = parent;
             }
-            else
+            else if (Comparer<TKey>.Default.Compare(node.Data.Key, parent.Data.Key) == 1)
             {
                 parent.Right = Insert(parent.Right, node);
                 parent.Right.Parent = parent;
             }
+            else
+                throw new InsertDuplicateKeyException(node.Data.Key.ToString());
 
             return parent;
         }
