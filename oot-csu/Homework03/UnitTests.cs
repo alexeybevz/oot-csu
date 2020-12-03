@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Xunit;
 
 namespace Homework03
@@ -217,6 +218,29 @@ namespace Homework03
         {
             var arr = new KeyValuePair<int, int>[8];
             Assert.Throws<ArgumentException>(() => tree.CopyTo(arr, 0));
+        }
+
+        [Fact]
+        public void TrySerializeAndDeserialize()
+        {
+            string path = "binary_search_tree.dat";
+            var serializer = new BinarySearchTreePersistable<int, int>();
+
+            serializer.Serialize(path, tree);
+            Assert.True(File.Exists(path));
+
+            var treeDeserialized = (BinarySearchTree<int,int>)serializer.Deserialize(path);
+            File.Delete(path);
+            Assert.True(treeDeserialized.ContainsKey(1) &&
+                        treeDeserialized.ContainsKey(3) &&
+                        treeDeserialized.Count == 9);
+
+            var expected = new List<int>() { 8, 3, 1, 6, 4, 7, 10, 14, 13 };
+            var actual = new List<int>();
+            var enumerator = treeDeserialized.GetEnumerator();
+            while (enumerator.MoveNext())
+                actual.Add(enumerator.Current.Key);
+            Assert.Equal(expected, actual);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Homework03
 {
+    [Serializable]
     public class BinarySearchTree<TKey, TValue> : IDictionary<TKey, TValue>
     {
         private Node _root;
@@ -210,6 +211,7 @@ namespace Homework03
             }
         }
 
+        [Serializable]
         private class Node
         {
             public KeyValuePair<TKey, TValue> Data { get; set; }
