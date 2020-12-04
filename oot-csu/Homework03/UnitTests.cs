@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using Xunit;
+using Moq;
 
 namespace Homework03
 {
@@ -223,14 +223,15 @@ namespace Homework03
         [Fact]
         public void TrySerializeAndDeserialize()
         {
-            string path = "binary_search_tree.dat";
-            var serializer = new BinarySearchTreePersistable<int, int>();
+            var serializerMock = new Mock<IDictionaryPersistable<int, int>>();
+            serializerMock
+                .Setup(x => x.Deserialize("path"))
+                .Returns(tree);
 
-            serializer.Serialize(path, tree);
-            Assert.True(File.Exists(path));
+            var serializer = serializerMock.Object;
+            Assert.DoesNotThrow(() => serializer.Serialize("path", tree));
 
-            var treeDeserialized = (BinarySearchTree<int,int>)serializer.Deserialize(path);
-            File.Delete(path);
+            var treeDeserialized = serializer.Deserialize("path");
             Assert.True(treeDeserialized.ContainsKey(1) &&
                         treeDeserialized.ContainsKey(3) &&
                         treeDeserialized.Count == 9);
