@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions.TestingHelpers;
 using Xunit;
-using Moq;
 
 namespace Homework03
 {
@@ -221,17 +221,18 @@ namespace Homework03
         }
 
         [Fact]
-        public void TrySerializeAndDeserialize()
+        public void TrySerializeAndDeserializeSuccess()
         {
-            var serializerMock = new Mock<IDictionaryPersistable<int, int>>();
-            serializerMock
-                .Setup(x => x.Deserialize("path"))
-                .Returns(tree);
+            var fileSystem = new MockFileSystem();
+            fileSystem.Directory.CreateDirectory(Directory.GetCurrentDirectory());
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "binary_search_tree.dat");
 
-            var serializer = serializerMock.Object;
-            Assert.DoesNotThrow(() => serializer.Serialize("path", tree));
+            var serializer = new BinarySearchTreePersistable<int, int>(fileSystem);
+            serializer.Serialize(path, tree);
 
-            var treeDeserialized = serializer.Deserialize("path");
+            Assert.True(fileSystem.FileExists(path));
+
+            var treeDeserialized = (BinarySearchTree<int, int>)serializer.Deserialize(path);
             Assert.True(treeDeserialized.ContainsKey(1) &&
                         treeDeserialized.ContainsKey(3) &&
                         treeDeserialized.Count == 9);
@@ -242,6 +243,86 @@ namespace Homework03
             while (enumerator.MoveNext())
                 actual.Add(enumerator.Current.Key);
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void TrySerializeWithReplaceFileAndDeserializeSuccess()
+        {
+            var fileSystem = new MockFileSystem();
+            fileSystem.Directory.CreateDirectory(Directory.GetCurrentDirectory());
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "binary_search_tree.dat");
+
+            var serializer = new BinarySearchTreePersistable<int, int>(fileSystem);
+            serializer.Serialize(path, tree);
+            Assert.True(fileSystem.FileExists(path));
+
+            serializer.Serialize(path, new BinarySearchTree<int, int>() { {1, 1} });
+            Assert.True(fileSystem.FileExists(path));
+
+            var treeDeserialized = (BinarySearchTree<int, int>)serializer.Deserialize(path);
+            Assert.True(treeDeserialized.ContainsKey(1) &&
+                        treeDeserialized.Count == 1);
+
+            var expected = new List<int>() { 1 };
+            var actual = new List<int>();
+            var enumerator = treeDeserialized.GetEnumerator();
+            while (enumerator.MoveNext())
+                actual.Add(enumerator.Current.Key);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void TrySerializeAndDeserializeEmptyTree()
+        {
+            var fileSystem = new MockFileSystem();
+            fileSystem.Directory.CreateDirectory(Directory.GetCurrentDirectory());
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "binary_search_tree.dat");
+
+            var serializer = new BinarySearchTreePersistable<int, int>(fileSystem);
+            serializer.Serialize(path, new BinarySearchTree<int, int>());
+
+            Assert.True(fileSystem.FileExists(path));
+
+            var treeDeserialized = (BinarySearchTree<int, int>)serializer.Deserialize(path);
+            Assert.True(treeDeserialized.Count == 0);
+        }
+
+        [Fact]
+        public void TrySerializeNullTree()
+        {
+            var fileSystem = new MockFileSystem();
+            fileSystem.Directory.CreateDirectory(Directory.GetCurrentDirectory());
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "binary_search_tree.dat");
+
+            var serializer = new BinarySearchTreePersistable<int, int>(fileSystem);
+            Assert.Throws<ArgumentNullException>(() => serializer.Serialize(path, null));
+        }
+
+        [Fact]
+        public void TrySerializeToNotExistsDirectory()
+        {
+            var fileSystem = new MockFileSystem();
+            var serializer = new BinarySearchTreePersistable<int, int>(fileSystem);
+            Assert.Throws<DirectoryNotFoundException>(() => serializer.Serialize("binary_search_tree.dat", tree));
+        }
+
+        [Fact]
+        public void TryDeserializeFromNotExistsDirectory()
+        {
+            var fileSystem = new MockFileSystem();
+            var serializer = new BinarySearchTreePersistable<int, int>(fileSystem);
+            Assert.Throws<DirectoryNotFoundException>(() => serializer.Deserialize("binary_search_tree.dat"));
+        }
+
+        [Fact]
+        public void TryDeserializeFromNotExistsFile()
+        {
+            var fileSystem = new MockFileSystem();
+            fileSystem.Directory.CreateDirectory(Directory.GetCurrentDirectory());
+            string pathNotExists = Path.Combine(Directory.GetCurrentDirectory(), "file_not_exists.dat");
+
+            var serializer = new BinarySearchTreePersistable<int, int>(fileSystem);
+            Assert.Throws<FileNotFoundException>(() => serializer.Deserialize(pathNotExists));
         }
     }
 }
